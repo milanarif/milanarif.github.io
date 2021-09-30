@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Todo</title>
     <link rel='stylesheet' href="./css/style.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
@@ -20,7 +20,7 @@
 
             <div id="input-row">
                 <form v-on:submit.prevent="addTask">
-                    <input v-model="newTaskTitle" id="new-task" placeholder="New task">
+                    <input v-model="newTaskTitle" id="new-task" placeholder="New task" required="required">
                     <button>Add</button>
                 </form>
             </div>

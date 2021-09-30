@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Nunito&family=Playfair+Display&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Nunito&family=Playfair+Display&display=swap");
 
 body {
     background-color: #222;
@@ -57,6 +57,7 @@ h1 {
 .finished_button {
     text-decoration: line-through;
     opacity: 0.7;
+    background-color: lightgreen;
 }
 
 #delete-button {
