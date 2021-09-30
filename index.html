@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel='stylesheet' href="./css/style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+    <main>
+        <div id="task-list">
+            <div id="setting-div">
+                <input type="checkbox" id="auto-remove" v-model="autoRemove">
+                <label for="auto-remove">Auto Remove</label>
+            </div>
+            <h1>
+                TODO
+                <small v-if="uncompleted">({{ uncompleted }} Tasks)</small>
+            </h1>
+
+            <div id="input-row">
+                <form v-on:submit.prevent="addTask">
+                    <input v-model="newTaskTitle" id="new-task" placeholder="New task">
+                    <button>Add</button>
+                </form>
+            </div>
+            <ul>
+                <task-item
+                    v-for="(task, index) in tasks"
+                    v-bind:key="task.id"
+                    v-bind:title="task.title"
+                    v-bind:done="task.done"
+                    v-on:completed-task="toggleStatus(index)"
+                    v-on:delete-task="tasks.splice(index, 1)"
+                ></task-item>
+            </ul>
+        </div>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script>
+        Vue.component('task-item', {
+            template: `
+                <li v-bind:class="{ finished_li: done }">
+                    <button v-on:click="$emit('completed-task')" v-bind:class="{ finished_button: done }">
+                      {{ title }}
+                    </button>
+                    <button v-if="done" id="delete-button" v-on:click="$emit('delete-task')">X</button>
+                </li>
+                `,
+            props: ['title', 'done']
+        })
+
+        new Vue({
+            el: '#task-list',
+            data: {
+                newTaskTitle: '',
+                prio: '',
+                autoRemove: false,
+                tasks: [
+                    {
+                        id: 1,
+                        title: 'Gym',
+                        done: false
+                    },
+                    {
+                        id: 2,
+                        title: 'Clean',
+                        done: false
+                    },
+                    {
+                        id: 3,
+                        title: 'Cook',
+                        done: false
+                    }
+                ],
+                nextTodoId: 4
+            },
+            computed: {
+              uncompleted() {
+                  return this.tasks.filter(this.ongoing).length
+              }
+            },
+            watch:{
+                autoRemove: function () {
+                    if (this.autoRemove) {
+                        this.tasks = this.tasks.filter(task => !task.done);
+                    }
+                }
+            },
+            methods: {
+                addTask: function () {
+                    this.tasks.push({
+                        id: this.nextTodoId++,
+                        title: this.newTaskTitle,
+                        done: false,
+                        priority: this.prio
+                    })
+                    this.newTaskTitle = ''
+                },
+                ongoing: function (task) {
+                    return !this.done(task)
+                },
+                done: function (task) {
+                    return task.done
+                },
+                toggleStatus: function (index) {
+                    if (this.autoRemove) {
+                        this.tasks.splice(index, 1);
+                    }
+                    else {
+                        this.tasks[index].done = !this.tasks[index].done;
+                    }
+                }
+            }
+
+        })
+    </script>
+
+
+</body>
+</html>
